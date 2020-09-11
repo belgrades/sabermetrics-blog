@@ -1,0 +1,546 @@
+% This text is proprietary.
+% It's a part of presentation made by myself.
+% It may not used commercial.
+% The noncommercial use such as private and study is free
+% Sep. 2005 
+% Author: Sascha Frank 
+% University Freiburg 
+% www.informatik.uni-freiburg.de/~frank/
+% additional use of \usepackage{beamerthemesplit}
+
+\documentclass{beamer}
+
+\begin{document}
+\title{Bases llenas con dos outs, Pit\'agoras al bate} 
+\author{Alejandro Crema} 
+\date{Noviembre de 2018\\Happy Hour ASOVAC\\
+Aula 35\\
+Caracas, Venezuela\\
+$\;$\\
+Con la asesor\'ia de Fernando Crema} 
+
+\frame{\titlepage} 
+\frame{\frametitle{Contenido}\tableofcontents} 
+
+\section{Porqu\'e hay tanta estad\'istica en el beisbol?} 
+
+\frame{\frametitle{Porqu\'e hay tanta estad\'istica en el beisbol?} 
+
+$\bullet$ Secuencia de estados y eventos que producen la transici\'on de un estado a otro. Se acumulan carreras anotadas. \break
+	
+Ejemplo:
+
+\[s_1= ((-,-,-),0),\;e_1 = \mbox{Out43},\;s_2 = ((-,-,-),1)\]
+\[s_2 = ((-,-,-),1),\;e_2 =2B,\;s_3 = ((-,*,-),1)\]
+\[s_3 = ((-,*,-),1),\;e_3 = 1B + CA,\;s_4 =((*,-,-),1)\]
+\[s_4 =((*,-,-),1),\;e_4=\mbox{out64 y out43},\;((X,X,X),3)\]  
+   
+$\bullet$ Se anota TODO lo que ocurre en relaci\'on a estados y eventos (sin comentarios cualitativos). \break
+	
+$\bullet$ Es muy sencillo contar ocurrencias de eventos y estados e  inventar m\'etricas (variables) para jugadores y equipos. 
+
+}
+
+\section{Ejemplos de variables tradicionales} 
+
+\frame{\frametitle{Ejemplos de variables tradicionales}
+
+$\bullet$ Total de eventos por jugador, se suman, se calculan relaciones, promedios, promedios ponderados, ...
+
+\[BB,BBI,GP,TS,SF,1B,2B,3B,HR,BR,OR,CI,CA,AP,\cdots\]
+
+\[H=1B+2B+3B+HR,\;AB=AP-BB-GP-TS-SF,\cdots\]
+
+\[AVE=\frac{H}{AB},\;SLG = \frac{1B + 2x2B + 3x3B + 4xHR}{AB}\]
+
+\[OBP = \frac{H + BB + GP}{AP-TS},\cdots\]
+
+$\bullet$ Todas tienen un significado preciso en el contexto del beisbol .
+}
+
+\section{Sabermetr\'ia} 
+
+\frame{\frametitle{Sabermetr\'ia}  
+
+$\bullet$ SABR: Society for American Baseball Research (1971). \break
+
+$\bullet$ METRICS: M\'etricas. \break 
+
+$\bullet$ SABR + METRICS = SAB{\bf E}RMETRICS. \break
+
+$\bullet$ Sabermetr\'ia: desarrollo EMPIRICO de variables sobre beisbol. Se va mucho m\'as all\'a de conteo y promedios ponderados tradicionales. \break 
+
+$\bullet$ Algunos de los pioneros: Craig R. Wright (empleado de la MLB, el primer Sabermetrician, 1981), Davey Johnson (pelotero, manager y matem\'atico, 1965), Bill James (escritor sobre beisbol, 1980), Billy Bean (gerente de los Atl\'eticos de Oakland, 2001).
+
+}
+
+\section{Para qu\'e?}
+
+\frame{\frametitle{Para qu\'e?} 
+
+Por siempre:\break
+
+$\bullet$ Para divertirnos, para discutir, para que hagamos click en p\'ags WEB (FanGraphs, Baseball References, MLB, LVBP), para hacer un Happy Hour de Asovac... \break
+
+$\bullet$ Para estimar el valor de un jugador. \break
+
+En la era saberm\'etrica:\break 
+
+$\bullet$ Para pronosticar carreras anotadas, recibidas y victorias.\break 
+
+$\bullet$ Para estimar el valor de un jugador en funci\'on de su aporte a las carreras anotadas, a las recibidas y a las victorias.\break
+
+$\bullet$ Para dise\~nar equipos y los lineups de los mismos.\break
+}
+
+
+\section{Ejemplos de variables saberm\'etricas} 
+
+\frame{\frametitle{Ejemplos de variables saberm\'etricas}
+
+$\bullet$ Variables saberm\'etricas: funciones de funciones de .. de variables tradicionales:
+
+\[OPS = OBP + SLG\]
+
+\[wOBA = \frac{1.95 HR + 1.55 3B - \cdots  + \dots + 0.72 (BB-BBI)}{AP-TS-BBI}\]
+
+\[\mbox{pythagorean variable} =  pyt = \frac{CA^\gamma}{CA^\gamma + CR^\gamma}\]
+
+\[WAR,\;BABIP,\;RAR,\cdots\]
+
+$\bullet$ Para entender lo que intentan medir debe examinarse la construcci\'on de los par\'ametros que las definen. Pronostican carreras y victorias? Eval\'uan peloteros?
+
+}
+
+\section{Construcci\'on del $wOBA$}
+
+\frame{\frametitle{Construcci\'on del $wOBA$ (The Book: Tom M Tango, Mitchell G Lichtman, Andrew E Dolphin (2007) Ed. Potomac)} 
+
+$\bullet$ Tango dice que The Book ES {\it el librito}.\break
+
+$\bullet$ El libro tiene errores conceptuales asombrosos (de matem\'aticas, de estad\'istica, de teor\'ia de probabilidades).\break 
+
+$\bullet$ El libro es extraordinario (han podido obviar los basamentos matem\'aticos que en realidad no usan). Construyen paso a paso una de las variables saberm\'etricas mas reconocidas: el $wOBA$. 
+
+}
+
+
+\frame{\frametitle{$wOBA$}
+
+Recordemos el $SLG$:
+
+\[SLG = \frac{1B + 2x2B + 3x3B + 4xHR}{AB}\]
+
+$\bullet$ En el $SLG$ solo aparecen 4 eventos. Los eventos siempre valen lo mismo sin importar los estados antes y despu\'es del evento.\break 
+
+Propuesta de Tango:
+
+\[E = \lbrace BB,BBI,GP,1B,\cdots,SO,out,\cdots \rbrace,\;\; \vert E \vert = 20\]
+
+\[S = \lbrace ((-,-,-),0), \cdots , ((*,*,*),2),\;\vert S \vert = 24\]
+
+\[v(e,sI,sF):\mbox{valor del evento};e\;\mbox{al pasar del estado}\;sI\; \mbox{al estado}\;sF\]
+
+\[ce(s):\mbox{carreras anotadas en promedio partir de s}\]
+
+}
+
+
+
+
+\frame{\frametitle{wOBA}
+
+Ejemplos:\break
+
+\[\bullet\;sI = ((-,*,-),0),\;e=1B+CA,\;\;sF=((*,-,-),0)\]
+
+\[v(e,sI,sF) = 1 + ce(sF) - ce(sI) = 1 + 0.953 - 1.189 = 0.764\] 
+
+\[\bullet sI = ((-,*,-),0),\;e=1B+CA+out4,\; sF =  ((-,-,-),1)\]
+
+\[v(e,sI,sF) = 1 + ce(sF) - ce(sI) = 1 + 0.297 - 1.189 = 0.108\] 
+
+\[\bullet sI = ((*,*,*),2),\;e=HR+4*CA,\;sF = ((-,-,-),0)\] 
+
+\[v(e,sI,sF) = 4 + ce(sF) - ce(sI) = 4 + 0.117 - 0.815 = 3.302\] 
+
+}
+
+\frame{\frametitle{Par\'entesis}
+
+Para los defensores de los toques de sacrificio:
+
+\[ce((*,-,-),0)=0.953,\;\;ce((-,*,-),1)=0.725\]
+\[ce((*,*,0))=1.573,\;\;ce((-,*,*))=1.467\]
+
+}
+
+
+
+\frame{\frametitle{$wOBA$}
+
+\[wOBAjug = \frac{\sum_{e \in E} \sum_{sI \in S} \sum_{sF \in S} v(e,sI,sF) njug(e,sI,sF)}{APjug-BBIjug-TSjug}\]
+
+\[= \cdots =\sum_{e \in E} vjug(e) propjug(e)\]
+
+Tango (2007): No se conoce $njug(e,sI,sF)$ pero s\'i conoce $nliga(e,sI,sF)$ y por supuesto $propliga(e,sI,sF)$. Eso es falso hoy en d\'ia. Pueden calcular $wOBAjug$ correctamente. El $wOBA$ original es:
+
+\[wOBA = \sum_{e \in E} vliga(e) propjug(e)\]
+}
+
+
+
+
+\frame{\frametitle{$wOBA(2018)$ seg\'un FanGraphs}
+
+\[wOBA = \]
+
+\[\frac{0.69BBnI + 0.72GP + 0.89(1B) + 1.27(2B) + 1.62(3B) + 2.1HR}{AP- BBI - TS}\]
+
+$\bullet$ Tango: para los defensores del $OPS$
+
+\[wOBA \approx \frac{2*OBP + SLG}{3}\;\;\mbox{vs}\;\; OPS = OBP + SLG\]
+
+
+$\bullet$ $wOBA$: weighted On Base Average. \break
+
+$\bullet$ Hay factores de correcci\'on por stadiums (no se batea igual en todas partes, usan Estad\'istica y F\'isica para corregir)!  
+}
+
+\frame{\frametitle{C\'omo usar y mejorar el wOBA y otras variables saberm\'etricas}
+
+$\bullet$ A partir del $wOBA$ se definen otras variables.\break
+
+$\bullet$ Usar $njug(e,sI,sF)$ y no $nliga(e,sI,sF)$. Lo usan?. \break
+
+$\bullet$ El $wOBA$ claramente evalua jugadores. Mientras m\'as alto mejor.
+\break
+
+$\bullet$ No hay que exagerar: {\it $wOBA$ is a statistic that uses linear weights (read: math) to determine {\bf exactly} how valuable each offensive outcome truly is)}\break
+
+
+$\bullet$ Bill James: calcular $v(e,sI,sF)$ seg\'un el contexto. Puede definirse el $wOBA$ y todas las variables saberm\'etricas para situaciones cr\'iticas.\break
+
+$\bullet$ Sirve para pronosticar carreras y  victorias? Conexi\'on con Programaci\'on Matem\'atica.   
+}
+
+\section{Programaci\'on matem\'atica para la selecci\'on de variables}
+
+\frame{\frametitle{Programaci\'on matem\'atica para la selecci\'on de variables} 
+
+$\bullet$ Modelo para pronosticar $Y$ ($CA$, $CR$, $JG$) usando las variables $X_i$ ($H,1B,\cdots,BABIP,WAR$).\break
+
+$\bullet$ Datos: Para cada variable $X_i$ y cada equipo $j$ en la muestra hist\'orica. Valores de las variables $X^{(j)}_i$ y $Y_j$.\break
+
+$\bullet$ El Modelo lineal en $X_i$:
+
+\[Y = \alpha_0 + \sum_{i=1}^n \alpha_i X_i + \epsilon \]
+
+}
+
+\frame{\frametitle{Selecci\'on de variables} 
+
+C\'omo hallar el mejor modelo que use solamente $k$ variables?
+
+\[P(k)\;\;min\;\;\sum_{j=1}^n \vert \epsilon_j \vert\;\;s.a:\]
+\[\epsilon_j = Y_j - (\alpha_0 + \sum_{i=1}^n \alpha_i X^j_i)\]
+\[z_i = 0 \implies \alpha_i = 0\]
+\[\sum_{i=1}^n z_i= k\]
+\[\alpha_0,\alpha_i \in \Re^n,\epsilon_j \in \Re,\;\;z_i \in \lbrace 0,1 \rbrace\]
+}
+
+\frame{\frametitle{Selecci\'on de variables. A.Crema y F.Crema (2016)} 
+
+$\bullet$ $P(k)$ se reescribe adecuadamente para que se pueda, en teor\'ia, resolver con alg\'un software de Programaci\'on Entera apropiado (por ejemplo CPLEX). Pero, si $n$ es grande y $k$ est\'a cerca de $\frac{n}{2}$ el tiempo de CPU puede ser inadmisible.\break
+
+$\bullet$ Un buen modelo usando $k$ variables puede construirse con un buen modelo usando $k-1$ variables a\~nadiendo y eliminando un n\'umero controlado de variables. \break
+
+$\bullet$ Se resuelve $P(1),P(2),\cdots,P(k_1)$. Luego se usan B\'usquedas Locales para hallar buenos modelos para $k_1+1,k_1+2,\cdots,k_2$ para luego resolver $P(k_2+1),\cdots,P(n)$   
+
+}
+
+\frame{\frametitle{Selecci\'on de variables}
+
+\begin{table} 
+ \caption{Modelos de pron\'ostico de Carreras. Busquedas locales sucesivas 1389 equipos de MLB (1967-2914) (kmax=7)}
+ \label{tab:4}
+ \begin{tabular}{lllll}
+ \hline\noalign{\smallkip}
+ Modelo & k & error promedio & maxerror & Tiempo (seg.)\\
+ \noalign{\smallskip}\hline\noalign{\smallskip}
+  \mbox{Atomos} &  13   & 26.68 &    296 & 20\\
+  \mbox{At+Ave} &  19   & 26.31 &    282 & 64\\ 
+  \mbox{Sabr}   &   4   & 16.99 &     75 &  7\\
+                &   8   & 16.92 &     77 &   \\
+  \mbox{Ave+Sabr}&   6   & 16.82 &    74 &  23\\
+                 &  14   & 16.76 &    75 &\\
+  \mbox{Todas}   &  27   & 15.69 &    88 &  514 \\
+  \noalign{\smallskip}\hline
+ \end{tabular}\\
+ \end{table}
+
+}
+
+\frame{\frametitle{Selecci\'on de variables}
+
+\begin{table} 
+ \caption{Modelos de pron\'ostico de Porcentaje de Victorias. Busquedas locales sucesivas 1389 equipos de MLB (1967-2914) (kmax=5)}
+ \label{tab:4}
+ \begin{tabular}{lllll}
+ \hline\noalign{\smallkip}
+ Modelo & k & error promedio & maxerror & Tiempo (seg.)\\
+ \noalign{\smallskip}\hline\noalign{\smallskip}
+  \mbox{Atomos} &  11   & 2.5  &    10.74 & 78\\
+                &  26   & 2.4  &    10.08 &   \\
+  \mbox{At+Ave} &  26   & 1.9 &     8.70 & 437\\ 
+                &  33   & 1.89 &    8.71 &    \\ 
+  \mbox{Sabr}   &  24   & 1.85 &    8.32 & 1610 (12600) \\
+                &  40   & 1.83 &    8.38 &           \\
+    
+  \noalign{\smallskip}\hline
+ \end{tabular}\\
+ \end{table}
+
+}
+
+\section{Construcci\'on de la variable Pitag\'orica: $pyt$}
+
+\frame{\frametitle{Construcci\'on de la variable Pitag\'orica: $pyt$ (Baseball abstracts: Bill James (1983) Ed. Ballantine). La idea primitiva: un modelo elemental v\'alido.} 
+
+Se gana si $CA > CR$. Se define la Calidad de los equipos:
+
+\[Cal_1 = \frac{CA_1}{CR_1},\;\;Cal_2 = \frac{CA_2}{CR_2} = \frac{CR_1}{CA_1}\]
+
+Modelo probabil\'istico elemental:
+
+\[ProbGana_1 = \frac{Cal_1}{Cal_1+Cal_2},\;\;ProbGana_2 = \frac{Cal_2}{Cal_1+Cal_2}\]
+
+con lo cual:
+
+\[ProbGana_1 = \frac{\frac{CA_1}{CR_1}}{ \frac{CA_1}{CR_1}   +   \frac{CR_1}{CA_1}} = \frac{CA_1^2}{CA_1^2 + CR_1^2}\]
+
+}
+
+
+\frame{\frametitle{Construcci\'on de la variable Pitag\'orica. La pr\'actica}
+
+\[pyt = \frac{CA^2}{CA^2 + CR^2},\;pyt = \frac{CA^\gamma}{CA^\gamma + CR^\gamma}\]
+
+\[\gamma\;\;\mbox{se ajusta con los datos de una liga usando m\'etodos estad\'isticos}\]
+
+\[min \sum_{i=1}^n (Prop_i-pyt_i)^2\]
+
+$\bullet$ Asumen el mismo $\gamma$ para toda la liga.\break 
+
+$\bullet$ No toman en cuenta el calendario restante. Las proyecciones podr\'ian ser incompatibles. Eso puede arreglarse a\~nadiendo restricciones al problema.
+
+} 
+
+\frame{\frametitle{Validaci\'on experimental-anal\'itica de la variable  pitag\'orica (Steven J. Miller: A Derivation of the Pytahgorean won-loss formula in Baseball. Chance 20 (1), 40-48 (2007))} 
+
+$\bullet$ Miller valida experimentalmente que $CA$ y $CR$ pueden ajustarse con  Variables Weibull independientes con par\'ametros $\alpha_A,\gamma$ y $\alpha_R,\gamma$ respectivamente. \break 
+
+$\bullet$ Lo que sigue es anal\'itico (luego de algunas cuentas muy complicadas):
+
+\[\mbox{Prob de ganar} =  \mbox{Prob} \lbrace CA > CR \rbrace = \frac{\mu_A^\gamma}{\mu_A^\gamma + \mu_R^\gamma}\]
+
+con $\mu_A$ y $\mu_R$ los valores esperados (promedios) de $CA$ y $CR$
+
+$\bullet$ $\gamma$ deber\'ia depender del equipo y de si se trata de $CA$ o de $CR$. En la pr\'actica se busca un solo $\gamma$. 
+ 
+}
+
+\frame{\frametitle{Validaci\'on experimental-anal\'itica de la f\'ormula pitag\'orica} 
+
+\[Prob \lbrace CA > CR \rbrace = \frac{\mu_A^\gamma}{\mu_A^\gamma + \mu_R^\gamma}\] con lo cual en la pr\'actica:
+
+\[Prob(ganar) = pyt = \frac{CA^\gamma}{CA^\gamma + CR^\gamma}\] 
+ 
+
+
+}
+
+
+
+\frame{\frametitle{Para qu\'e sirve la f\'ormula pitag\'orica} 
+
+\[\mbox{A mitad de temporada tenemos}\;\;prop,CA\;\;\mbox{y}\;\;CR\;\;\mbox{para un equipo}\] 
+
+Calculamos
+
+\[pyt = \frac{CA^\gamma}{CA^\gamma + CR^\gamma}\]
+
+\[\mbox{y comparamos}\mbox{\;}prop\;\mbox{con}\;pyt\] 
+
+Ya que el ajuste es bueno podemos concentrarnos en desarrollar modelos para proyectar $CA$ (con un modelo de la ofensiva)  y $CR$ (con un modelo para la defensiva y el pitcheo) para luego proyectar Prob de ganar usando la f\'ormula pitag\'orica.
+
+
+}
+
+\frame{\frametitle{$pyt$ para MLB y LVBP} 
+
+$\bullet$ Se ajust\'o el modelo para la MLB con 1389 equipos desde 1967 hasta 2014.
+
+\[\gamma = 1.85,\;\;\mbox{error promedio} = 0.0198,\;\mbox{maxerror} = 0.0895\]
+
+$\bullet$ idem para la LVBP con 32 equipos desde 2015 hasta el domingo 18 de Noviembre de 2018. 
+
+\[\gamma = 1.29,\;\;\mbox{error promedio} = 0.0372,\;\mbox{maxerror} = 0.1400\]
+
+
+}
+
+\frame{\frametitle{$pyt$ para la temporada 2018} 
+
+$\bullet$ Se ajust\'o el modelo para la LVBP con 8 equipos (temporada 2018 hasta el domingo 18 de noviembre) 
+
+\[\gamma = 1.4784,\;\;\mbox{error promedio} = 0.0323,\;\mbox{maxerror} = 0.0564\]
+
+}
+
+\frame{\frametitle{Proyecci\'on temporada 2018}
+
+\begin{table} 
+ \caption{Proyecci\'on temporada 2018}
+ \label{tab:4}
+ \begin{tabular}{lllllll}
+ \hline\noalign{\smallkip}
+ Equipo & G & P & prop & pyt & G & G \\
+ \noalign{\smallskip}\hline\noalign{\smallskip}
+ \mbox{Cardenales} &  25 & 12 & .636 & .597 & 38.9 & 39\\
+ \mbox{Navegantes} &  18 & 14 & .563 & .526 & 34.3 & 34\\
+ \mbox{Leones}     &  16 & 15 & .516 & .510 & 32.3 & {\bf 32}\\
+ \mbox{Bravos}     &  17 & 16 & .515 & .548 & 33.4 & {\bf 33-34}\\
+ \mbox{Aguilas}    &  15 & 17 & .469 & .514 & 30.9 & 31\\
+ \mbox{Tigres}     &  14 & 16 & .467 & .453 & 28.9 & 29\\
+ \mbox{Tiburones}  &  13 & 18 & .419 & .383 & 25.2 & {\bf 25}\\
+ \mbox{Caribes}    &  13 & 19 & .406 & .456 & 27.1 & {\bf 27}\\
+ \noalign{\smallskip}\hline
+ \end{tabular}\\
+ \end{table}
+ 
+ $\bullet$ Con Bravos 34: 251 Ganados (Temporada tiene 252 juegos).
+
+}
+
+
+\end{document}
+
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\frame{\frametitle{Un par\'entesis}
+
+$\bullet$ Lanzamiento de una moneda. Cara: c, Sello: s \break
+
+$\bullet$ Modelo 1:
+
+\[p(c) = \frac{1}{2},\;p(s) = \frac{1}{2}\]
+
+\[p(c) \geq 0,\;p(s) \geq 0,\;p(c)+p(s)=1\]
+
+$\bullet$ Modelo 2:
+
+\[p(c) = \frac{3}{4},\;p(s) = \frac{1}{4}\]
+
+\[p(c) \geq 0,\;p(s) \geq 0,\;p(c)+p(s)=1\]
+
+$\bullet$ Ambos son modelos probabil\'isticos v\'alidos. Cu\'al usar?
+}
+
+\frame{\frametitle{Un par\'entesis}
+
+$\bullet$ Disponemos de $1000$ datos. $\lbrace c,c,s,c,\cdots, s,s,c,s \rbrace$ \break
+
+$\bullet$ 523 c y 477 s.\break
+
+Ajuste del modelo 1: 
+
+\[\frac{(523-500)^2 + (477-500)^2}{1000} = \frac{1058}{1000} = 1.058\] 
+
+Ajuste del modelo 2: 
+
+\[\frac{(523-750)^2 + (477-250)^2}{1000} = \frac{103058}{1000} = 103.058\] 
+
+$\bullet$ El modelo 1 ajusta mejor.
+}
+
+\frame{\frametitle{Modelo ingenuo para las probabilidades de ganar juegos}
+
+$\bullet$ Una liga de beisbol con $n$ equipos. CA: carreras anotadas. CR: carreras recibidas. \break
+
+$\bullet$ Queremos un modelo para predecir las victorias de los equipos por el resto de la temporada. \break
+
+$\bullet$ Datos hasta el momento: $(CA_1,CR_1,Porc(G)_1), \cdots ,(CA_n,CR_n,Porc(G)_n)$ \break 
+
+$\bullet$ Modelo ingenuo para las probabilidades de ganar y perder un juego por cada equipo.
+
+\[p_i(ganar) = \frac{CA_i}{CA_i+CR_i},\;p_i(perder) = \frac{CR_i}{CA_i+CR_i}\]
+
+\[Error = \frac{\sum_{i=1}^n (Porc(G)_i - 100*p_i(ganar))^2}{n}\]  
+
+}
+
+
+
+  
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\frame{\frametitle{}
+\begin{figure}[!ht]
+    \centering
+
+\psset{
+  xunit=0.5,
+  yunit=0.5,
+  algebraic
+}
+
+
+
+\begin{pspicture}(-0.25,-0.25)(10.00,10.00)
+  % Axes
+  \psaxes[
+    dx=2,
+    dy=2,
+    labels=none,
+    ticklinestyle=dotted,
+    tickwidth=0.5pt,
+    xticksize=0 0.5,
+    yticksize=0 1,
+  ]{->}(0,0)(-0.05,-0.05)(10.5,10.5)[$n$,0][$q(n)$,90]
+  \psaxes[
+    dx=2,
+    Dx=2,
+    dy=2,
+    Dy=2
+  ](0,0)(-0.05,-0.05)(10.00,10.00)
+  % Functions.
+  %\psplot[linecolor=red]{0}{1}{200*x+500}
+  %\rput(.9,500){$y$}
+  %\psplot[linecolor=black,linewidth=0.055]{0}{0.5}{0}
+  \psdots[dotsize=3.0pt 0](0,2)(1,3)(2,5) (3,7) (4,6) (5,10)(6,5) (7,3) (8,4) (9,2) (10,1)  
+  %\psplot[linecolor=black,linewidth=0.0155]{0.0}{10}{x}
+  %\psplot[linecolor=blue,linestyle=dashed]{0}{1}{0.5*x}
+  %\rput(.5,.375){$f^+(\theta)$}
+  %\rput(.8,.125){$p\theta$} 
+  %\psplot[linecolor=red,linestyle=dashed]{0}{1}{0.25*x}
+\end{pspicture}
+
+   \vspace*{5mm}     
+   \caption{}
+             
+\end{figure}
+
+
+
+
+}
+
+
+
+
+
+
